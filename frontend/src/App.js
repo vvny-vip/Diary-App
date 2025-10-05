@@ -1,14 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-
-function Home() {
-  return (
-    <div>
-      <h1>My Diary App 📝</h1>
-      <p>Welcome! Your React app is working 🎉</p>
-    </div>
-  );
-}
+import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
+import SignUpform from "./SignUpform";
 
 function About() {
   return (
@@ -28,22 +20,42 @@ function Contact() {
   );
 }
 
-function App() {
+export default function App() {
+  const activeStyle = {
+    fontWeight: "bold",
+    color: "green",
+    textDecoration: "none",
+    borderBottom: "2px solid green", // optional, shows underline for active tab
+    paddingBottom: "2px",
+  };
+
+  const linkStyle = {
+    textDecoration: "none",
+    color: "black",
+    fontWeight: "bold",
+  };
+
   return (
     <Router>
-      <nav style={{ marginBottom: "20px" }}>
-        <Link to="/" style={{ marginRight: "15px" }}>Home</Link>
-        <Link to="/about" style={{ marginRight: "15px" }}>About</Link>
-        <Link to="/contact">Contact</Link>
+      <nav style={{ marginBottom: "20px", display: "flex", gap: "20px" }}>
+        <NavLink to="/" style={({ isActive }) => (isActive ? activeStyle : linkStyle)}>
+          Home
+        </NavLink>
+
+        <NavLink to="/about" style={({ isActive }) => (isActive ? activeStyle : linkStyle)}>
+          About
+        </NavLink>
+
+        <NavLink to="/contact" style={({ isActive }) => (isActive ? activeStyle : linkStyle)}>
+          Contact
+        </NavLink>
       </nav>
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<SignUpform />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
   );
 }
-
-export default App;
