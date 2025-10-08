@@ -1,13 +1,12 @@
-import React from "react";
-
-
-
-    
+import React from "react";  
 function SignUpform() {
   return (
-    <div>
-      <h1>My Diary App 📝</h1>
-      <p>Welcome! Your React app is working 🎉</p>
+    <div className="forms">
+      <form className="form">
+      <input type="text" className="input" placeholder="Enter Username"/>
+      <input type="email" className="input1" placeholder="Enter Email" />
+      <input type="password" className="input2" placeholder="Enter Password" />
+      </form>
     </div>
   );
 }
