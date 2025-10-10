@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
+  background: rgba(0,0,0,0.5);
 }
 
 .navbar {
@@ -19,7 +20,7 @@ body {
   height: 100vh;
 }
 .form{
-  height: 400px;
+  height: auto;
   width: 350px;
   border-radius: 15px;
   background-color: white;
@@ -28,14 +29,14 @@ body {
   flex-direction: column;
   box-shadow: 0px 4px 20px rgba(0,0,0,0.2);
   padding: 30px;
-  padding-top: 60px;
-  gap: 20px;
+  padding-top: 30px;
+  gap: 15px;
 }
 .input, .input1,.input2{
 
   height: 40px;
-  width: 98%;
-  margin-top: 20px ;
+  width: 100%;
+  margin-top: 2px ;
 border-radius: 8px;
 border: 1px solid #ccc;
 padding: 10px;
@@ -46,4 +47,22 @@ box-sizing: border-box;
   border: 2px solid #7c7e81; 
   outline: none;              
   box-shadow: 0 0 5px rgba(154, 139, 139, 0.5); 
+}
+.label,.label1,.label2{
+  font-size: 18px;
+  
+}
+.button{
+  height: 40px;
+  width: 100%;
+  background-color: #59df28;
+  color: white;
+  border-radius: 8px;
+  border: 1px solid white;
+  margin-top: 15px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+.button:hover{
+  background-color: #42ac1b;
 }
