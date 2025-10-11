@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  background: rgba(0,0,0,0.5);
+
 }
 
 .navbar {
@@ -13,6 +13,27 @@ body {
   font-size: 17px;
   align-items: center;
 }
+/* Normal link style */
+.nav-link {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  padding: 6px 8px;     
+  font-size: 14px;        
+  border-radius: 6px;     
+  transition: background-color 0.2s;
+}
+
+
+.nav-link.active {
+  font-weight: bold;
+  color: white;
+  background-color: #3498db; 
+  border-radius: 8px;
+  padding: 8px 8px;
+  text-decoration: none;
+}
+
 .forms{
   display: flex;
   justify-content: center;
