@@ -1,10 +1,11 @@
 import React,{useState,useEffect} from "react";
+import "./diary.css"
 export default function AddEntry() {
   const [entry, setEntry] = useState({ title: "", content: "" ,date:new Date().toISOString().split("T")[0],
     mood:""
   });
   const [users, setUsers] = useState([]);
-  const emojiMoods = [
+  const Moods = [
     { emoji: '😊', label: 'Happy' },
     { emoji: '😐', label: 'Neutral' },
     { emoji: '😢', label: 'Sad' },
@@ -27,13 +28,15 @@ export default function AddEntry() {
       alert("Please fill in all fields.");
       return;
     }
-    const newEntry = { ...entry, id: Date.now() };
+    const newEntry = { ...entry, id: Date.now(),mood:entry.mood || "Neutral" };
     setUsers((prev) => [...prev, newEntry]);
     setEntry({ title: "", content: "" ,date:new Date().toISOString().split("T")[0],});
+    
   }
   return (
     <div className="add-entry-container">
-      <h2>Add New Entry</h2>
+      <div className="header">
+      <h2 style={{color:"red"}}>Add New Entry</h2>
       <form className="entry-form" onSubmit={handleSubmit}>
         <label className="entry-label">Title:</label>
         <input type="text" className="entry-input" placeholder="Enter Title" name="title" value={entry.title} onChange={handleChange} />
@@ -59,23 +62,34 @@ export default function AddEntry() {
             ))}
           </ul>
         )}
-        <div className="emoji-picker"style={{border:"1px solid black"}}>
-  {emojiMoods.map((m) => (
-    <label key={m.label} style={{ fontSize: "2rem", margin: "0 5px", cursor: "pointer" }}>
-      <input
-        type=""
+        <div className="emoji-picker">
+         {Moods.map((m) => (
+           <button key={m.label} style={{
+  height: "50px",
+  width: "50px",
+  fontSize: "18px",
+  borderRadius: "15px",
+  border: entry.mood === m.label ? "3px solid #3498db" : "2px solid #e9e9e9ff",
+  backgroundColor: entry.mood === m.label ? "#3498db" : "rgba(255, 255, 255, 1)",
+  color: entry.mood === m.label ? "white" : "black",
+  cursor: "pointer",
+  transition: "all 0.2s"
+}}
+
+           
+        
         name="mood"
         value={m.label}
-        checked={entry.mood === m.label}
-        onChange={handleChange}
-        style={{display: "none",backgroundColor:"red"}}
-      />
+        onClick={() => setEntry((prev) => ({ ...prev, mood: m.label }))}>
       {m.emoji}
-    </label>
+    </button>
   ))}
 </div>
 
       </div>
+      
+      </div>
+      <div className="footer"></div>
     </div>
   );
 } 
