@@ -4,7 +4,7 @@ import SignUpform from "./SignUpform";
 import AddEntry from "./AddEntry";
 import ProtectedRoute from "./Protect";
 import "./Style.css"
-import "./diary.css"
+
 
 export default function App() {
   const [check,setCheck] = useState(false);

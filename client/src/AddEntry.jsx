@@ -1,96 +1,134 @@
-import React,{useState,useEffect} from "react";
-import "./diary.css"
-export default function AddEntry() {
-  const [entry, setEntry] = useState({ title: "", content: "" ,date:new Date().toISOString().split("T")[0],
-    mood:""
-  });
-  const [users, setUsers] = useState([]);
-  const Moods = [
-    { emoji: '😊', label: 'Happy' },
-    { emoji: '😐', label: 'Neutral' },
-    { emoji: '😢', label: 'Sad' },
-    { emoji: '😠', label: 'Angry' },
-    { emoji: '🥳', label: 'Celebrating' },
-    { emoji: '😴', label: 'Tired' },
-    { emoji: '😍', label: 'Loved' },
-    { emoji: '😨', label: 'Scared' },
-    { emoji: '🙏', label: 'Grateful' },
-    { emoji: '😰', label: 'Anxious' }
-  ];
-  
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setEntry((prev) => ({ ...prev, [name]: value }));
-  }
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (entry.title.trim() === "" || entry.content.trim() === "") {
-      alert("Please fill in all fields.");
-      return;
-    }
-    const newEntry = { ...entry, id: Date.now(),mood:entry.mood || "Neutral" };
-    setUsers((prev) => [...prev, newEntry]);
-    setEntry({ title: "", content: "" ,date:new Date().toISOString().split("T")[0],});
+import React, { useState } from 'react';
+import './diary.css';
+
+const AddEntry = () => {
+  const [selectedMood, setSelectedMood] = useState('😊');
+  const [title, setTitle] = useState('');
+  const [date, setDate] = useState('');
+  const [content, setContent] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterMood, setFilterMood] = useState('All Moods');
+
+  const moods = ['😊', '😡', '😍', '😴', '😨', '🎉', '😎'];
+
+  const handleSaveEntry = () => {
+    // In a real app, this would save to a backend
+    console.log('Saving entry:', { title, date, mood: selectedMood, content });
+    alert('Entry saved successfully!');
     
-  }
+    // Reset form
+    setTitle('');
+    setDate('');
+    setContent('');
+  };
+
   return (
-    <div className="add-entry-container">
-      <div className="header">
-      <h2 style={{color:"red"}}>Add New Entry</h2>
-      <form className="entry-form" onSubmit={handleSubmit}>
-        <label className="entry-label">Title:</label>
-        <input type="text" className="entry-input" placeholder="Enter Title" name="title" value={entry.title} onChange={handleChange} />
-         <input type="date" className="entry-date" name="date" value={entry.date} onChange={handleChange} />
+    <div className='diary-page'>
+    <div className="dashboard-container">
+      {/* Top Navigation Bar */}
 
-        <label className="entry-label">Content:</label>
-        <textarea className="entry-textarea" placeholder="Enter Content" name="content" value={entry.content} onChange={handleChange} />
-        <button type="submit" className="entry-button">Add Entry</button>
-      </form>
-      <div className="entries-list">
-        <h3>Your Entries:</h3>
-        {users.length === 0 ? (
-          <p>No entries yet.</p>
-        ) : (
-          <ul>
-            {users.map((user) => (
-              <li key={user.id} className="entry-item" style={{listStyle:"none"}}>
-                <h4>{user.title}</h4>
-                <p>{user.content}</p>
-                <small>{user.date}</small>
-                <p>Mood: {user.mood}</p>
-              </li> 
-            ))}
-          </ul>
-        )}
-        <div className="emoji-picker">
-         {Moods.map((m) => (
-           <button key={m.label} style={{
-  height: "50px",
-  width: "50px",
-  fontSize: "18px",
-  borderRadius: "15px",
-  border: entry.mood === m.label ? "3px solid #3498db" : "2px solid #e9e9e9ff",
-  backgroundColor: entry.mood === m.label ? "#3498db" : "rgba(255, 255, 255, 1)",
-  color: entry.mood === m.label ? "white" : "black",
-  cursor: "pointer",
-  transition: "all 0.2s"
-}}
+      <div className="dashboard-content">
+        {/* Left Sidebar */}
+        <aside className="sidebar">
+          <div className="sidebar-card">
+            <div className="app-header">
+              <i className="fas fa-book"></i>
+              <h1>My Diary</h1>
+            </div>
+            <hr className='hro'/>
+            <p className="entry-count">0 entries</p>
+            
+            <div className="search-container">
+              <input 
+                type="text" 
+                placeholder="Search entries..." 
+                className="search-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <i className="fas fa-search search-icon"></i>
+            </div>
+            
+            <div className="filter-container">
+              <label>Filter by Mood:</label>
+              <select 
+                value={filterMood}
+                onChange={(e) => setFilterMood(e.target.value)}
+                className="mood-filter"
+              >
+                <option>All Moods</option>
+                <option>Happy</option>
+                <option>Angry</option>
+                <option>Love</option>
+                <option>Tired</option>
+                <option>Scared</option>
+                <option>Celebratory</option>
+                <option>Cool</option>
+              </select>
+            </div>
+          </div>
+        </aside>
 
-           
-        
-        name="mood"
-        value={m.label}
-        onClick={() => setEntry((prev) => ({ ...prev, mood: m.label }))}>
-      {m.emoji}
-    </button>
-  ))}
-</div>
-
+        {/* Main Content Area */}
+        <main className="main-content">
+          <div className="entry-card">
+            <h2>New Diary Entry</h2>
+            <hr className='hr' />
+            <div className="input-row">
+              <div className="input-group">
+                <input 
+                  type="text" 
+                  placeholder="Title" 
+                  className="title-input"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
+              
+              <div className="input-group">
+                <input 
+                  type="date" 
+                  className="date-input"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+                <i className="fas fa-calendar calendar-icon"></i>
+              </div>
+            </div>
+            
+            <div className="mood-section">
+              <h3>How are you feeling?</h3>
+              <div className="mood-buttons">
+                {moods.map((mood) => (
+                  <button
+                    key={mood}
+                    className={`mood-btn ${selectedMood === mood ? 'active' : ''}`}
+                    onClick={() => setSelectedMood(mood)}
+                  >
+                    {mood}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            <div className="content-section">
+              <textarea 
+                placeholder="What's on your mind today?"
+                className="content-input"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              ></textarea>
+            </div>
+            
+            <button className="save-btn" onClick={handleSaveEntry}>
+              Save Entry 📝
+            </button>
+          </div>
+        </main>
       </div>
-      
-      </div>
-      <div className="footer"></div>
+    </div>
     </div>
   );
-} 
+};
 
+export default AddEntry;

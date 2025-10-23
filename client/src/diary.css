@@ -1,168 +1,293 @@
-/* global reset + nice box-sizing so widths behave predictably */
-*,
-*::before,
-*::after {
+/* Scoped only to the diary page */
+.diary-page {
+  background: linear-gradient(135deg, #8a2be2, #4169e1);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Remove global resets that broke other pages */
+.diary-page * {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  top: 0;
-  background: linear-gradient(135deg, #354de7, #d227e9);
-  font-family: Arial, sans-serif;
-  color: #222;
-}
-
-/* small helper hover class (unchanged) */
-.kaka {
-  background-color: rgb(188, 190, 189);
-  transition: background-color 0.2s;
-}
-.kaka:hover {
-  background-color: #3498db;
-  border-radius: 8px;
-}
-
-/* main container: fixed max-width so it doesn't overspread */
-.add-entry-container {
-  display: grid;
-  grid-template-rows: 300px 1fr;    /* fixed header height, rest flexible */
-  gap: 12px;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+/* Main container */
+.diary-page .dashboard-container {
+  max-width: 1400px;
   width: 100%;
-  max-width: 1400px;               /* important: prevents overspread */
-  height: 700px;
-  margin: 0;                    /* left alignment while keeping margin */
-  border-radius: 8px;
-  padding: 0px;
-  margin-left: 60px;
-  text-align: center;
-  overflow: auto; 
-   /* prevents children escaping container */
-}
-
-/* header */
-.header {
-  background-color: #ffffff;
-  border: 2px solid rgb(255, 255, 255);
-  color: white;
-  padding: 18px;
- max-height: 600px;
-  border-radius: 15px;
-  display: grid;
-  width: 70%;
-  align-content: center;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  margin-left: 390px;
-  margin-top :35px;
-  height: 900px;
-  box-shadow:0px 2px 8px rgba(0, 0, 0, 0.1) ;           /* keep header content inside */
 }
 
-/* give header inner content a max width so inputs don't stretch full width */
-
-
-/* form layout inside header */
-.entry-form {
+/* Layout grid */
+.diary-page .dashboard-content {
   display: grid;
-  grid-template-columns: 140px 1fr; /* label + input column */
-  gap: 10px 16px;
-  align-items: center;
-  margin-top: 6px;
+  grid-template-columns: 400px 1.5fr;
+  min-height: 80vh;
 }
 
-/* labels + inputs */
-.entry-label {
+/* Sidebar */
+.diary-page .sidebar {
+  background: white;
+  padding: 30px;
+  border-right: 1px solid #f0f0f0;
+}
+
+.diary-page .app-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.diary-page .app-header i {
+  color: #8a2be2;
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.diary-page .app-header h1 {
+  color: #333;
+  font-size: 24px;
   font-weight: 700;
 }
-.entry-input,
-.entry-textarea,
-.entry-date {
-  width: 100%;
-  max-width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+
+.diary-page .entry-count {
+  color: #666;
   font-size: 14px;
-  background: #fff;
+  margin-bottom: 25px;
 }
 
-/* textarea height and behavior */
-.entry-textarea {
-  min-height: 90px;
-  resize: vertical;
-}
-.footer {
-  height: 700px;
-  background-color: #f9f9f9;
-  border: 1px solid #f9f9f9;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  
-  margin-top: -312px;
-  width: 25.5%;
-  padding: 30px;
-}
-/* button style: keep it compact and aligned left */
-.entry-button {
-  grid-column: 1 / -1;    /* span full width of form grid */
-  justify-content: center;    /* keep button to the left instead of stretching */
-  padding: 10px 16px;
-  background-color: #2980b9;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: background 0.2s;
-}
-.entry-button:hover { background: #1f5e8d; }
-
-/* content area below header */
-.entries-list {
-  overflow-y: auto;       /* allow scrolling if many entries */
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-top: 6px;
+.diary-page .search-container {
+  position: relative;
+  margin-bottom: 20px;
 }
 
-/* single entry card */
-.entry-item {
-  background-color: #f6f7fb;
-  border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+.diary-page .search-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border 0.3s;
 }
 
-/* emoji picker: small fixed cells so they don't stretch */
-.emoji-picker {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 50px); /* fixed 50px columns */
-  gap: 10px;
-  justify-content: start;   /* keep emojis to the left */
-  margin-top: 12px;
+.diary-page .search-input:focus {
+  outline: none;
+  border-color: #8a2be2;
 }
 
-/* style for each emoji button */
-.emoji-picker button {
-  height: 50px;
-  width: 50px;
-  font-size: 18px;
-  border-radius: 12px;
-  border: 2px solid #e9e9e9;
+.diary-page .search-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8a2be2;
+}
+
+.diary-page .filter-container {
+  margin-top: 15px;
+}
+
+.diary-page .filter-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.diary-page .mood-filter {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
   background: white;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.12s, border-color 0.12s, background 0.12s;
 }
-.emoji-picker button:hover { transform: translateY(-2px); }
 
-/* selected mood look: uses a class you already toggle via state */
-.emoji-picker button.selected {
-  border-color: #3498db;
-  background: #3498db;
+.diary-page .mood-filter:focus {
+  outline: none;
+  border-color: #8a2be2;
+}
+
+/* Main Content */
+.diary-page .main-content {
+  padding: 30px;
+  background: #f8f9fa;
+  height: 100vh;            /* set fixed height */
+  overflow-y: auto;         /* enables vertical scroll */
+  scroll-behavior: smooth; 
+}
+
+.diary-page .entry-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  height: 100%;
+}
+
+.diary-page .entry-card h2 {
+  color: #333;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.diary-page .input-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.diary-page .input-group {
+  position: relative;
+}
+
+.diary-page .title-input,
+.diary-page .date-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1.5px solid #e9e8e8;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 9px;
+  transition: border 0.3s;
+}
+
+.diary-page .title-input:focus,
+.diary-page .date-input:focus {
+  outline: none;
+  border-color: #8a2be2;
+}
+
+.diary-page .calendar-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8a2be2;
+}
+
+.diary-page .mood-section {
+  margin-bottom: 25px;
+}
+
+.diary-page .mood-section h3 {
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.diary-page .mood-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.diary-page .mood-btn {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #e0e0e0;
+  border-radius: 15px;
+  background: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.hr {
+  border: none;
+  height: 1.5px;
+  background-color: #f0f0f0;
+  margin: 15px 0 25px 0;
+  border-radius: 2px;
+  opacity: 0.8;
+  display: flex;
+  margin-top: -10px;
+}
+.hro {
+  border: none;
+  height: 1.5px;
+  background-color: #f0f0f0;
+  margin: 0px 0 20px 0;
+  border-radius: 2px;
+  opacity: 0.9;
+  width: 100%;
+  display: block;
+}
+.diary-page .mood-btn.active {
+  background: linear-gradient(135deg, #4169e1, #8a2be2);
+  border-color: transparent;
+  transform: scale(1.05);
   color: white;
+}
+
+.diary-page .mood-btn:hover {
+  border-color: #8a2be2;
+}
+
+.diary-page .content-section {
+  margin-bottom: 25px;
+}
+
+.diary-page .content-input {
+  width: 100%;
+  height: 200px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+  transition: border 0.3s;
+}
+
+.diary-page .content-input:focus {
+  outline: none;
+  border-color: #8a2be2;
+}
+
+.diary-page .save-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #4169e1, #8a2be2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.diary-page .save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(65, 105, 225, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .diary-page .dashboard-content {
+    grid-template-columns: 1fr;
+  }
+
+  .diary-page .input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .diary-page .mood-buttons {
+    justify-content: center;
+  }
+
+  .diary-page .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
 }

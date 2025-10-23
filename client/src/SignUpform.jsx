@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from "react";  
+import "./Style.css"
 import { useNavigate } from "react-router-dom";
 function SignUpform({setCheck}) {
   const navigate = useNavigate();
