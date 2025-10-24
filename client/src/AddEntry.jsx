@@ -11,10 +11,27 @@ const AddEntry = () => {
 
   const moods = ['😊', '😡', '😍', '😴', '😨', '🎉', '😎'];
 
-  const handleSaveEntry = () => {
-    // In a real app, this would save to a backend
-    console.log('Saving entry:', { title, date, mood: selectedMood, content });
+  const handleSaveEntry = async () => {
+    try{
+       const response = await fetch("http://localhost:2000/content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title,
+          content: content
+        }),
+      });
+      if(!response.ok){
+        alert("Error saving entry");
+        return;
+      }
+    }
+    catch(err){
+      console.error("Error connecting to server:", err);
+      alert("Server error. Try again later.");
+    }
     alert('Entry saved successfully!');
+  
     
     // Reset form
     setTitle('');

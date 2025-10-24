@@ -13,6 +13,19 @@ exports.registerUser = async (req, res) => {
     }
 };
 
+//content
+exports.titleContent = async (req, res) => {
+    const { title, content } = req.body;
+    try {
+        const newEntry = new Entry({ title, content });
+        await newEntry.save();
+        res.status(201).send('Entry saved successfully');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error saving entry');
+    }
+};
+
 // Login user
 exports.loginUser = async (req, res) => {
     const { Email, password } = req.body;

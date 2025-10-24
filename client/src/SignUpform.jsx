@@ -7,6 +7,7 @@ function SignUpform({ setCheck }) {
   const [form, setForm] = useState({ Username: "", Email: "", password: "" });
   const [face, setFace] = useState(true);
   const [show, setShow] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   // Handle input changes
   function handleChange(e) {
@@ -26,7 +27,7 @@ function SignUpform({ setCheck }) {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch("http://localhost:2000/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -40,7 +41,8 @@ function SignUpform({ setCheck }) {
         setFace(false);
         setCheck(true);
         setForm({ Username: "", Email: "", password: "" });
-        navigate("/AddEntry");
+        setSuccess(true);
+        
       } else {
         const errorText = await response.text();
         alert("Error: " + errorText);
@@ -54,6 +56,22 @@ function SignUpform({ setCheck }) {
   return (
     <div style={{ background: face ? "rgba(76,32,32,0.2)" : "white" }}>
       <div className="forms" style={{ background: face ? "rgba(0,0,0,0.5)" : "white" }}>
+      {success && (
+  <div className="modal">
+    <div className="modal-content">
+      <p>Registration Successful!</p>
+      <button
+        onClick={() => {
+          setSuccess(false); // close dialog
+          navigate("/AddEntry"); // now navigate
+        }}
+      >
+        OK
+      </button>
+    </div>
+  </div>
+)}
+
         <form className="form" onSubmit={handleSubmit} style={{ display: face ? "flex" : "none" }} >
           <h2><center>Sign Up</center></h2>
 
