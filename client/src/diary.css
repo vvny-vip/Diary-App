@@ -88,9 +88,29 @@
   transform: translateY(-50%);
   color: #8a2be2;
 }
+.saved{
+  background-color: #f6f6f6;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+ margin-top: 25px;
+ border-radius: 10px;
+  overflow-y: auto;
+}
+.saved-entries-container {
+  max-height: 400px; /* adjust as needed */
+  overflow-y: auto;
+  margin-top: 20px;
+  padding-right: 5px; /* optional, avoid scrollbar overlay */
+}
 
-.diary-page .filter-container {
-  margin-top: 15px;
+.saved-entries-container ul {
+  padding: 0;
+  margin: 0;
+}
+.saved-entries-container li {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
 .diary-page .filter-container label {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './diary.css';
 
 const AddEntry = () => {
@@ -7,6 +7,7 @@ const AddEntry = () => {
   const [date, setDate] = useState('');
   const [content, setContent] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [users,setUsers] = useState([]);
   const [filterMood, setFilterMood] = useState('All Moods');
 
   const moods = ['😊', '😡', '😍', '😴', '😨', '🎉', '😎'];
@@ -18,7 +19,9 @@ const AddEntry = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: title,
-          content: content
+          content: content,
+          mood: selectedMood,
+          date: date
         }),
       });
       if(!response.ok){
@@ -30,14 +33,26 @@ const AddEntry = () => {
       console.error("Error connecting to server:", err);
       alert("Server error. Try again later.");
     }
-    alert('Entry saved successfully!');
-  
-    
     // Reset form
     setTitle('');
     setDate('');
     setContent('');
+    setSelectedMood('😊');
+    Rendered();
   };
+  const Rendered = async() => {
+    try{
+      const res = await fetch("http://localhost:2000/users");
+      const data = await res.json();
+      setUsers(data);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    }
+  };
+  useEffect(() => {
+    Rendered();
+  }, []);
+    
 
   return (
     <div className='diary-page'>
@@ -83,6 +98,19 @@ const AddEntry = () => {
                 <option>Cool</option>
               </select>
             </div>
+          </div>
+          <div className='saved-entries-container'>
+               {users.length > 0 ? (
+        <ul>
+          {users.map((entry) => (
+            <li key={entry._id} style={{listStyle:"none"}} div className='saved'>
+            title:{entry.title} <br/> content:{entry.content} <br />date:{entry.date} <br />mood:{entry.mood}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No users found</p>
+      )}
           </div>
         </aside>
 

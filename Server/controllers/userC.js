@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const {User,Entry} = require('../models/user');
 
 // Register user
 exports.registerUser = async (req, res) => {
@@ -15,9 +15,9 @@ exports.registerUser = async (req, res) => {
 
 //content
 exports.titleContent = async (req, res) => {
-    const { title, content } = req.body;
+    const { title, content ,date,mood} = req.body;
     try {
-        const newEntry = new Entry({ title, content });
+        const newEntry = new Entry({ title, content, date, mood });
         await newEntry.save();
         res.status(201).send('Entry saved successfully');
     } catch (err) {
@@ -25,6 +25,15 @@ exports.titleContent = async (req, res) => {
         res.status(500).send('Error saving entry');
     }
 };
+
+exports.getUser = async (req,res) => {
+  try {
+    const users = await Entry.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+}
 
 // Login user
 exports.loginUser = async (req, res) => {
