@@ -2,18 +2,23 @@ import React, { useState,useEffect } from 'react';
 import './diary.css';
 
 const AddEntry = () => {
-  const [selectedMood, setSelectedMood] = useState('😊');
+  const [selectedMood, setSelectedMood] = useState('');
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [content, setContent] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [users,setUsers] = useState([]);
   const [filterMood, setFilterMood] = useState('All Moods');
+  const [editId, setEditId] = useState(null);
 
   const moods = ['😊', '😡', '😍', '😴', '😨', '🎉', '😎'];
 
   const handleSaveEntry = async () => {
     try{
+      if (!title.trim() || !content.trim() || !date.trim() || !selectedMood.trim()) {
+  alert('Please fill all fields before saving!');
+  return;
+}
        const response = await fetch("http://localhost:2000/content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -24,6 +29,7 @@ const AddEntry = () => {
           date: date
         }),
       });
+      
       if(!response.ok){
         alert("Error saving entry");
         return;
@@ -37,7 +43,8 @@ const AddEntry = () => {
     setTitle('');
     setDate('');
     setContent('');
-    setSelectedMood('😊');
+    setSelectedMood('');
+    setEditId(null);
     Rendered();
   };
   const Rendered = async() => {
@@ -53,7 +60,63 @@ const AddEntry = () => {
     Rendered();
   }, []);
     
-
+  const userE = (editItem) => {
+    try{
+        setTitle(editItem.title);
+        setDate(new Date(editItem.date).toISOString().split('T')[0]);
+        setContent(editItem.content);
+         setSelectedMood(editItem.mood);
+         setEditId(editItem._id);
+      }
+    
+    catch(err){
+      alert("Update failed ⛓️‍💥");
+    }
+  }
+const editedUsers = async(id) => {
+    try{
+      const response = await fetch(`http://localhost:2000/edit/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title,
+          content: content,
+          mood: selectedMood,
+          date: date
+        }),
+      });
+      if(!response.ok){
+        alert("Error editing entry");
+        return;
+      }
+    }
+    catch(err){
+      console.error("Error connecting to server:", err);
+      alert("Server error. Try again later.");
+    }
+    // Reset form
+    setTitle('');
+    setDate('');
+    setContent('');
+    setSelectedMood('');
+    Rendered();
+  };
+const deleteEntry = async(id) => {
+  try{
+    const response = await fetch(`http://localhost:2000/delete/${id}`, {
+      method: "DELETE",
+    });
+    if(!response.ok){
+      alert("Error deleting entry");
+      return;
+    }
+    Rendered();
+  }
+  catch(err){
+    console.error("Error connecting to server:", err);
+    alert("Server error. Try again later.");
+  }
+};
   return (
     <div className='diary-page'>
     <div className="dashboard-container">
@@ -68,7 +131,7 @@ const AddEntry = () => {
               <h1>My Diary</h1>
             </div>
             <hr className='hro'/>
-            <p className="entry-count">0 entries</p>
+            <p className="entry-count">{users.length} entries</p>
             
             <div className="search-container">
               <input 
@@ -103,13 +166,17 @@ const AddEntry = () => {
                {users.length > 0 ? (
         <ul>
           {users.map((entry) => (
-            <li key={entry._id} style={{listStyle:"none"}} div className='saved'>
-            title:{entry.title} <br/> content:{entry.content} <br />date:{entry.date} <br />mood:{entry.mood}
+            <li key={entry._id}   className='saved'><strong>
+            Title:</strong> {entry.title} <br/> <strong>
+            Content:</strong> {entry.content} <br /><strong>Date:</strong> {new Date(entry.date).toLocaleDateString()}
+            <br />mood:{entry.mood}
+           <button className='refresh' onClick={() => userE(entry)}>Edit</button>
+            <button className='refresh2' onClick={() => deleteEntry(entry._id)}>Delete</button>
             </li>
           ))}
         </ul>
       ) : (
-        <p>No users found</p>
+        <p>No Entries Yet</p>
       )}
           </div>
         </aside>
@@ -165,9 +232,13 @@ const AddEntry = () => {
               ></textarea>
             </div>
             
-            <button className="save-btn" onClick={handleSaveEntry}>
-              Save Entry 📝
-            </button>
+<button 
+  className="save-btn" 
+  onClick={() => editId ? editedUsers(editId) : handleSaveEntry()}
+>
+  {editId ? "Update Entry ✏️" : "Save Entry 📝"}
+</button>
+
           </div>
         </main>
       </div>
