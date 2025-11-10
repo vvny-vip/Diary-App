@@ -8,6 +8,7 @@ function SignUpform({ setCheck }) {
   const [face, setFace] = useState(true);
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [login, setLogin] = useState(false); // start as SignUp
 
   // Handle input changes
   function handleChange(e) {
@@ -21,19 +22,23 @@ function SignUpform({ setCheck }) {
     e.preventDefault();
 
     // Check for empty fields
-    if (form.Username.trim() === "" || form.Email.trim() === "" || form.password.trim() === "") {
+    if ((!login && (form.Username.trim() === "" || form.Email.trim() === "")) || form.password.trim() === "") {
       setShow(true);
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:2000/register", {
+      const url = login
+        ? "http://localhost:2000/login"
+        : "http://localhost:2000/register";
+
+      const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           Username: form.Username,
           Email: form.Email,
-          password: form.password
+          password: form.password,
         }),
       });
 
@@ -42,7 +47,10 @@ function SignUpform({ setCheck }) {
         setCheck(true);
         setForm({ Username: "", Email: "", password: "" });
         setSuccess(true);
-        
+
+        setTimeout(() => {
+          navigate("/AddEntry");
+        }, 5000);
       } else {
         const errorText = await response.text();
         alert("Error: " + errorText);
@@ -56,44 +64,47 @@ function SignUpform({ setCheck }) {
   return (
     <div style={{ background: face ? "rgba(76,32,32,0.2)" : "white" }}>
       <div className="forms" style={{ background: face ? "rgba(0,0,0,0.5)" : "white" }}>
-      {success && (
-  <div className="modal">
-    <div className="modal-content">
-      <p>Registration Successful!</p>
-      <button
-        onClick={() => {
-          setSuccess(false); // close dialog
-          navigate("/AddEntry"); // now navigate
-        }}
-      >
-        OK
-      </button>
-    </div>
-  </div>
-)}
+        {success && (
+          <div className="modal">
+            <div className="modal-content">
+              <p>{login ? "Login Successful!" : "Registration Successful!"}</p>
+              <button
+                onClick={() => {
+                  setSuccess(false);
+                  navigate("/AddEntry");
+                }}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        )}
 
-        <form className="form" onSubmit={handleSubmit} style={{ display: face ? "flex" : "none" }} >
-          <h2><center>Sign Up</center></h2>
+        <form className="form" onSubmit={handleSubmit} style={{ display: face ? "flex" : "none" }}>
+          <h2><center>{login ? "Login" : "Sign Up"}</center></h2>
 
-          <label className="label">Username:</label>
-          <input
-            type="text"
-            className="input"
-            placeholder="Enter Username"
-            name="Username"
-            value={form.Username}
-            onChange={handleChange}
-          />
-
+          {!login && (
+            <>
+              <label className="label">Username:</label>
+              <input
+                type="text"
+                className="input"
+                placeholder="Enter Username"
+                name="Username"
+                value={form.Username}
+                onChange={handleChange}
+              />
+            </>
+          )}
           <label className="label1">Email:</label>
-          <input
-            type="email"
-            className="input1"
-            placeholder="Enter Email"
-            name="Email"
-            value={form.Email}
-            onChange={handleChange}
-          />
+              <input
+                type="email"
+                className="input1"
+                placeholder="Enter Email"
+                name="Email"
+                value={form.Email}
+                onChange={handleChange}
+              />
 
           <label className="label2">Password:</label>
           <input
@@ -105,7 +116,23 @@ function SignUpform({ setCheck }) {
             onChange={handleChange}
           />
 
-          <button type="submit" className="button">Submit</button>
+          <button type="submit" className="button">
+            {login ? "Login" : "Sign Up"}
+          </button>
+
+          <a
+            href="#"
+            className="link"
+            style={{ textDecoration: "none", cursor: "pointer" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setLogin(!login);
+              setForm({ Username: "", Email: "", password: "" });
+              setShow(false);
+            }}
+          >
+            {login ? "Don't have an account? Sign Up" : "Already have an account? Log In"}
+          </a>
         </form>
 
         {show && (

@@ -111,6 +111,7 @@ const deleteEntry = async(id) => {
       return;
     }
     Rendered();
+    setEditId(null);
   }
   catch(err){
     console.error("Error connecting to server:", err);
@@ -232,8 +233,8 @@ const deleteEntry = async(id) => {
               ></textarea>
             </div>
             
-<button 
-  className="save-btn" 
+            <button 
+              className="save-btn" 
   onClick={() => editId ? editedUsers(editId) : handleSaveEntry()}
 >
   {editId ? "Update Entry ✏️" : "Save Entry 📝"}
