@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const JWT = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const userRoutes = require('./routes/userR');
 
 const app = express();

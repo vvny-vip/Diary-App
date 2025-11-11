@@ -1,10 +1,12 @@
 const {User,Entry} = require('../models/user');
+const bcrypt = require('bcryptjs');
 
 // Register user
 exports.registerUser = async (req, res) => {
     const { Username, Email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
     try {
-        const newUser = new User({ Username, Email, password });
+        const newUser = new User({ Username, Email, password: hashedPassword });
         await newUser.save();
         res.status(201).send('User registered successfully');
     } catch (err) {
@@ -67,13 +69,15 @@ exports.deleteEntry = async (req, res) => {
 
 // Login user
 exports.loginUser = async (req, res) => {
-    const { Email, password } = req.body;
+    const { Email,password} = req.body;
     try {
-        const user = await User.findOne({ Email, password });
-        if (user) {
-            res.status(200).send('Login successful');
+        const user = await User.findOne({ Email});
+         const isMatch = await bcrypt.compare(password, user.password);
+
+        if (isMatch) {
+           return res.status(200).send('Login successful');
         } else {
-            res.status(401).send('Invalid email or password');
+          return  res.status(401).send('Invalid email or password');
         }
     } catch (err) {
         console.error(err);
