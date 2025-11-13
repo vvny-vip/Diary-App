@@ -1,6 +1,7 @@
 const {User,Entry} = require('../models/user');
 const bcrypt = require('bcryptjs');
-
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = 'adcbe124';
 // Register user
 exports.registerUser = async (req, res) => {
     const { Username, Email, password } = req.body;
@@ -70,12 +71,18 @@ exports.deleteEntry = async (req, res) => {
 // Login user
 exports.loginUser = async (req, res) => {
     const { Email,password} = req.body;
+    
     try {
         const user = await User.findOne({ Email});
-         const isMatch = await bcrypt.compare(password, user.password);
+        if(!user){
+            return res.status(400).send("get out");
+        }
+         const isMatch = await bcrypt.compare(password,user.password );
 
         if (isMatch) {
-           return res.status(200).send('Login successful');
+            const token = jwt.sign({Username:user.Username},SECRET_KEY,{expiresIn:'1h'});
+    
+          return res.status(200).json({ message: 'Login successful ✅', token});
         } else {
           return  res.status(401).send('Invalid email or password');
         }
