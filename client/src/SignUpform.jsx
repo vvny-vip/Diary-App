@@ -43,11 +43,13 @@ function SignUpform({ setCheck }) {
       });
 
       if (response.ok) {
-        const data = await response.json();   
+        const data = await response.json(); // GET TOKEN FROM BACKEND
 
-    if (data.token) {
-      localStorage.setItem("token", data.token);  
+    // 💛 Save the token ONLY if user logged in
+    if (login && data.token) {
+        localStorage.setItem("token", data.token);
     }
+
         setFace(false);
         setCheck(true);
         setForm({ Username: "", Email: "", password: "" });

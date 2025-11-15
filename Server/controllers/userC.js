@@ -9,10 +9,12 @@ exports.registerUser = async (req, res) => {
     try {
         const newUser = new User({ Username, Email, password: hashedPassword });
         await newUser.save();
-        res.status(201).send('User registered successfully');
+         const token = jwt.sign({Username:newUser.Username},SECRET_KEY,{expiresIn:'1h'});
+    
+        res.status(201).json({ message: 'User registered successfully',token });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error registering user');
+        res.status(500).json({ message: 'Error registering user'});
     }
 };
 
@@ -25,7 +27,7 @@ exports.titleContent = async (req, res) => {
             return res.status(400).send('All fields are required');
         }
         await newEntry.save();
-        res.status(201).send('Entry saved successfully');
+        res.status(201).json({message:'Entry saved successfully'});
     } catch (err) {
         console.error(err);
         res.status(500).send('Error saving entry');
@@ -46,12 +48,12 @@ exports.editEntry = async (req, res) => {
     try {
         const updatedEntry = await Entry.findByIdAndUpdate(id, { title, content, date, mood }, { new: true });
         if (!updatedEntry) {
-            return res.status(404).send('Entry not found');
+            return res.status(404).json({message:'Entry not found'});
         }  
-        res.status(200).send('Entry updated successfully');
+        res.status(200).json({ message:'Entry updated successfully'});
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error updating entry');
+        res.status(500).json({message:'Error updating entry'});
     }
 };
 exports.deleteEntry = async (req, res) => {
@@ -61,10 +63,10 @@ exports.deleteEntry = async (req, res) => {
         if (!deletedEntry) {
             return res.status(404).send('Entry not found');
         }
-        res.status(200).send('Entry deleted successfully');
+        res.status(200).json({message:'Entry deleted successfully'});
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error deleting entry');
+        res.status(500).json({message:'Error deleting entry'});
     }
 };
 
@@ -75,7 +77,7 @@ exports.loginUser = async (req, res) => {
     try {
         const user = await User.findOne({ Email});
         if(!user){
-            return res.status(400).send("get out");
+            return res.status(400).json({ message: "User not found"});
         }
          const isMatch = await bcrypt.compare(password,user.password );
 
@@ -84,10 +86,10 @@ exports.loginUser = async (req, res) => {
     
           return res.status(200).json({ message: 'Login successful ✅', token});
         } else {
-          return  res.status(401).send('Invalid email or password');
+          return  res.status(401).json({message:'Invalid email or password'});
         }
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error logging in');
+        res.status(500).json({message:'Error logging in'});
     }
 };
