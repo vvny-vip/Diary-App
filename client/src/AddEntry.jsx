@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react';
+const API = process.env.REACT_APP_API_URL;
 import './diary.css';
 
 const AddEntry = () => {
@@ -19,7 +20,7 @@ const AddEntry = () => {
   alert('Please fill all fields before saving!');
   return;
 }
-       const response = await fetch("http://localhost:2000/content", {
+       const response = await fetch(`${API}/content`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -49,7 +50,7 @@ const AddEntry = () => {
   };
   const Rendered = async() => {
     try{
-      const res = await fetch("http://localhost:2000/users");
+      const res = await fetch(`${API}/users`);
       const data = await res.json();
       setUsers(data);
     } catch (err) {
@@ -75,7 +76,7 @@ const AddEntry = () => {
   }
 const editedUsers = async(id) => {
     try{
-      const response = await fetch(`http://localhost:2000/edit/${id}`, {
+      const response = await fetch(`${API}/edit/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -103,7 +104,7 @@ const editedUsers = async(id) => {
   };
 const deleteEntry = async(id) => {
   try{
-    const response = await fetch(`http://localhost:2000/delete/${id}`, {
+    const response = await fetch(`${API}/delete/${id}`, {
       method: "DELETE",
     });
     if(!response.ok){

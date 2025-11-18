@@ -1,5 +1,6 @@
 import React, { useState } from "react";  
 import "./Style.css";
+const API = process.env.REACT_APP_API_URL;
 import { useNavigate } from "react-router-dom";
 
 function SignUpform({ setCheck }) {
@@ -29,8 +30,8 @@ function SignUpform({ setCheck }) {
 
     try {
       const url = login
-        ? "http://localhost:2000/login"
-        : "http://localhost:2000/register";
+        ?  `${API}/login`
+        :`${API}/register`;
 
       const response = await fetch(url, {
         method: "POST",
