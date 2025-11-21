@@ -13,10 +13,7 @@ app.use(express.json());
 
 
 
-mongoose.connect(process.env.MONGO_URI, {
-  tls: true,
-  tlsAllowInvalidHostnames: false
-})
+mongoose.connect(process.env.MONGO_URI)
 
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Failed to connect to MongoDB', err));
