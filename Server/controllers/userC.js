@@ -1,19 +1,29 @@
 const {User,Entry} = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'adcbe124';
+const SECRET_KEY = process.env.JWT_SECRET
 // Register user
 exports.registerUser = async (req, res) => {
     const { Username, Email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
     try {
+         const user = await User.findOne({Email});
+        if(user){
+            return res.status(400).json({ message: "User already exists"});
+        }
+         const hashedPassword = await bcrypt.hash(password, 12);
         const newUser = new User({ Username, Email, password: hashedPassword });
         await newUser.save();
          const token = jwt.sign({Username:newUser.Username},SECRET_KEY,{expiresIn:'1h'});
     
         res.status(201).json({ message: 'User registered successfully',token });
+        console.log(req.body);
+        console.log("SECRET_KEY:", SECRET_KEY);
+
     } catch (err) {
         console.error(err);
+        if (err.code === 11000) {
+        return res.status(400).json({ message: "User already exists" });
+    }
         res.status(500).json({ message: 'Error registering user'});
     }
 };

@@ -341,7 +341,7 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .diary-page .dashboard-content {
     grid-template-columns: 1fr;
   }

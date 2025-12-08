@@ -22,7 +22,8 @@ const AddEntry = () => {
 }
        const response = await fetch(`${API}/content`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" ,
+          "Authorization": `Bearer ${localStorage.getItem("token")}` },
         body: JSON.stringify({
           title: title,
           content: content,
@@ -34,6 +35,9 @@ const AddEntry = () => {
       if(!response.ok){
         alert("Error saving entry");
         return;
+      }
+      else{
+        alert("Entry saved successfully!");
       }
     }
     catch(err){
@@ -78,20 +82,16 @@ const editedUsers = async(id) => {
     try{
       const response = await fetch(`${API}/edit/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        headers: { "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}` },
+        body : JSON.stringify({
           title: title,
           content: content,
           mood: selectedMood,
           date: date
         }),
       });
-      if(!response.ok){
-        alert("Error editing entry");
-        return;
-      }
-    }
-    catch(err){
+    }catch(err){
       console.error("Error connecting to server:", err);
       alert("Server error. Try again later.");
     }
@@ -106,6 +106,9 @@ const deleteEntry = async(id) => {
   try{
     const response = await fetch(`${API}/delete/${id}`, {
       method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
     });
     if(!response.ok){
       alert("Error deleting entry");

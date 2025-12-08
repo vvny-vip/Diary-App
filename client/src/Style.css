@@ -16,7 +16,7 @@ body {
 /* Normal link style */
 .nav-link {
   text-decoration: none;
-  color: black;
+  color: rgb(0, 0, 0);
   font-weight: bold;
   padding: 6px 8px;     
   font-size: 14px;        

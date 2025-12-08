@@ -3,7 +3,7 @@ import "./Style.css";
 const API = process.env.REACT_APP_API_URL;
 import { useNavigate } from "react-router-dom";
 
-function SignUpform({ setCheck }) {
+function SignUpform() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ Username: "", Email: "", password: "" });
   const [face, setFace] = useState(true);
@@ -47,22 +47,20 @@ function SignUpform({ setCheck }) {
         const data = await response.json(); // GET TOKEN FROM BACKEND
 
     // 💛 Save the token ONLY if user logged in
-    if (login && data.token) {
-        localStorage.setItem("token", data.token);
-    }
+    if (data.token) {
+    localStorage.setItem("token", data.token);
+}
+
 
         setFace(false);
-        setCheck(true);
         setForm({ Username: "", Email: "", password: "" });
         setSuccess(true);
-
-        setTimeout(() => {
           navigate("/AddEntry");
-        }, 5000);
       } else {
-        const errorText = await response.text();
-        alert("Error: " + errorText);
-      }
+  const errorData = await response.json();   
+  alert(errorData.message);                 
+}
+
     } catch (err) {
       console.error("Error connecting to server:", err);
       alert("Server error. Try again later.");
