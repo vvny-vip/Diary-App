@@ -104,3 +104,12 @@ box-sizing: border-box;
 .button:hover{
   background-color: #42ac1b;
 }
+.button:disabled {
+  background-color: rgb(57, 131, 11);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.button:disabled:hover {
+  background-color: rgb(84, 170, 9);
+}

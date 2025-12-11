@@ -10,6 +10,7 @@ function SignUpform() {
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState(false);
   const [login, setLogin] = useState(false); // start as SignUp
+  const [loading, setLoading] = useState(false);
 
   // Handle input changes
   function handleChange(e) {
@@ -27,7 +28,7 @@ function SignUpform() {
       setShow(true);
       return;
     }
-
+    setLoading(true); 
     try {
       const url = login
         ?  `${API}/login`
@@ -64,7 +65,9 @@ function SignUpform() {
     } catch (err) {
       console.error("Error connecting to server:", err);
       alert("Server error. Try again later.");
-    }
+    }finally {
+    setLoading(false);  
+  }
   }
 
   return (
@@ -122,9 +125,10 @@ function SignUpform() {
             onChange={handleChange}
           />
 
-          <button type="submit" className="button">
-            {login ? "Login" : "Sign Up"}
-          </button>
+          <button type="submit" className="button" disabled={loading}>
+  {loading ? "Loading..." : login ? "Login" : "Sign Up"}
+</button>
+          
 
           <a
             href="#"
