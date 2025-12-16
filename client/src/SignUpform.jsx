@@ -136,6 +136,7 @@ function SignUpform() {
             style={{ textDecoration: "none", cursor: "pointer" }}
             onClick={(e) => {
               e.preventDefault();
+              localStorage.removeItem("token");
               setLogin(!login);
               setForm({ Username: "", Email: "", password: "" });
               setShow(false);

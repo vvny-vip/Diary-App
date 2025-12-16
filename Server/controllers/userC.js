@@ -13,11 +13,9 @@ exports.registerUser = async (req, res) => {
          const hashedPassword = await bcrypt.hash(password, 12);
         const newUser = new User({ Username, Email, password: hashedPassword });
         await newUser.save();
-         const token = jwt.sign({Username:newUser.Username},SECRET_KEY,{expiresIn:'1h'});
+         const token = jwt.sign({ id: newUser._id, username: newUser.Username },SECRET_KEY,{expiresIn:'1h'});
     
         res.status(201).json({ message: 'User registered successfully',token });
-        console.log(req.body);
-        console.log("SECRET_KEY:", SECRET_KEY);
 
     } catch (err) {
         console.error(err);
@@ -32,7 +30,7 @@ exports.registerUser = async (req, res) => {
 exports.titleContent = async (req, res) => {
     const { title, content ,date,mood} = req.body;
     try {
-        const newEntry = new Entry({ title, content, date, mood });
+        const newEntry = new Entry({ title, content, date, mood,userId: req.user.id });
         if (!title.trim() || !content.trim() || !date.trim() || !mood.trim()) {
             return res.status(400).send('All fields are required');
         }
@@ -46,7 +44,7 @@ exports.titleContent = async (req, res) => {
 
 exports.getUser = async (req,res) => {
   try {
-    const users = await Entry.find();
+    const users = await Entry.find({userId: req.user.id });
     res.json(users);
   } catch (err) {
     res.status(500).send(err);
@@ -56,7 +54,9 @@ exports.editEntry = async (req, res) => {
     const { id } = req.params;
     const { title, content, date, mood } = req.body;
     try {
-        const updatedEntry = await Entry.findByIdAndUpdate(id, { title, content, date, mood }, { new: true });
+        const updatedEntry = await Entry.findOneAndUpdate({ _id: id, userId: req.user.id },
+     { title, content, date, mood },
+      { new: true });
         if (!updatedEntry) {
             return res.status(404).json({message:'Entry not found'});
         }  
@@ -69,7 +69,9 @@ exports.editEntry = async (req, res) => {
 exports.deleteEntry = async (req, res) => {
     const { id } = req.params;
     try {
-        const deletedEntry = await Entry.findByIdAndDelete(id);
+        const deletedEntry = await Entry.findOneAndDelete({
+      _id: id,
+       userId: req.user.id});
         if (!deletedEntry) {
             return res.status(404).send('Entry not found');
         }
@@ -92,7 +94,7 @@ exports.loginUser = async (req, res) => {
          const isMatch = await bcrypt.compare(password,user.password );
 
         if (isMatch) {
-            const token = jwt.sign({Username:user.Username},SECRET_KEY,{expiresIn:'1h'});
+            const token = jwt.sign({ id: user._id, username: user.Username },SECRET_KEY,{expiresIn:'1h'});
     
           return res.status(200).json({ message: 'Login successful ✅', token});
         } else {

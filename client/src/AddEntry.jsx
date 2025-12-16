@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect} from 'react';
 const API = process.env.REACT_APP_API_URL;
 import './diary.css';
 
@@ -11,7 +11,7 @@ const AddEntry = () => {
   const [users,setUsers] = useState([]);
   const [filterMood, setFilterMood] = useState('All Moods');
   const [editId, setEditId] = useState(null);
-  const [loading, setLoading] = useState(false);  // ✅ ADDED
+  const [loading, setLoading] = useState(false);  
 
   const moods = ['😊', '😡', '😍', '😴', '😨', '🎉', '😎'];
 
@@ -22,7 +22,7 @@ const AddEntry = () => {
         return;
       }
 
-      setLoading(true);   // ✅ ADDED
+      setLoading(true);   
 
       const response = await fetch(`${API}/content`, {
         method: "POST",
@@ -47,7 +47,7 @@ const AddEntry = () => {
       console.error("Error connecting to server:", err);
       alert("Server error. Try again later.");
     } finally {
-      setLoading(false);   // ✅ ADDED
+      setLoading(false);   
     }
 
     setTitle('');
@@ -90,7 +90,7 @@ const AddEntry = () => {
 
   const editedUsers = async (id) => {
     try {
-      setLoading(true);  // ✅ ADDED
+      setLoading(true);  
 
       await fetch(`${API}/edit/${id}`, {
         method: "PUT",
@@ -110,7 +110,7 @@ const AddEntry = () => {
       console.error("Error connecting to server:", err);
       alert("Server error. Try again later.");
     } finally {
-      setLoading(false);  // ✅ ADDED
+      setLoading(false); 
     }
 
     setTitle('');
@@ -118,11 +118,12 @@ const AddEntry = () => {
     setContent('');
     setSelectedMood('');
     Rendered();
+    setEditId(null);
   };
 
   const deleteEntry = async (id) => {
     try {
-      setLoading(true);  // ✅ ADDED
+      setLoading(true);  
 
       const response = await fetch(`${API}/delete/${id}`, {
         method: "DELETE",
@@ -135,22 +136,20 @@ const AddEntry = () => {
         alert("Error deleting entry");
         return;
       }
-
       Rendered();
-      setEditId(null);
 
     } catch (err) {
       console.error("Error connecting to server:", err);
       alert("Server error. Try again later.");
     } finally {
-      setLoading(false);  // ✅ ADDED
+      setLoading(false);  
     }
   };
 
   return (
     <div className='diary-page'>
 
-      {/* ✅ LOADING OVERLAY ADDED */}
+    
       {loading && (
         <div className="loading-overlay">
           <div className="spinner"></div>
@@ -221,7 +220,7 @@ const AddEntry = () => {
             </div>
           </aside>
 
-          {/* Main Content */}
+          
           <main className="main-content">
             <div className="entry-card">
               <h2>New Diary Entry</h2>

@@ -10,7 +10,8 @@ const entrySchema = new mongoose.Schema({
     title: { type: String },
     content: { type: String },
     date: { type: Date, default: Date.now },
-    mood: { type: String }
+    mood: { type: String },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
 });
 
 const User = mongoose.model('User', userSchema);
