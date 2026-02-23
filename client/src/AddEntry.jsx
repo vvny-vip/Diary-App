@@ -1,4 +1,5 @@
 import React, { useState,useEffect} from 'react';
+import { useNavigate } from "react-router-dom";
 const API = process.env.REACT_APP_API_URL;
 import './diary.css';
 
@@ -12,7 +13,7 @@ const AddEntry = () => {
   const [filterMood, setFilterMood] = useState('All Moods');
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(false);  
-
+  const navigate = useNavigate();
   const moods = ['😊', '😡', '😍', '😴', '😨', '🎉', '😎'];
 
   const handleSaveEntry = async () => {
@@ -75,6 +76,13 @@ const AddEntry = () => {
   useEffect(() => {
     Rendered();
   }, []);
+
+
+  const handleLogout = () => {
+  localStorage.removeItem("token"); 
+  navigate("/");             
+  alert("Logged out successfully 👋");
+};
 
   const userE = (editItem) => {
     try {
@@ -224,6 +232,7 @@ const AddEntry = () => {
           <main className="main-content">
             <div className="entry-card">
               <h2>New Diary Entry</h2>
+              <button className='logout' onClick={handleLogout}>logout</button>
               <hr className='hr' />
 
               <div className="input-row">

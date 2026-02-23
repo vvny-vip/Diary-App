@@ -3,6 +3,7 @@ import SignUpform from "./SignUpform";
 import AddEntry from "./AddEntry";
 import ViewEntries from "./viewEntries";
 import Protect from "./Protect";
+import LandingPage from "./landing";
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
       
       <Routes>
         {/* Public pages */}
-        <Route path="/" element={<SignUpform />} />
+         <Route path="/" element={<LandingPage />} />
+        <Route path="/auth" element={<SignUpform />} />
         
         {/* Protected pages */}
         <Route 

@@ -179,6 +179,17 @@
   margin-top: 20px;
   padding-right: 5px; 
 }
+.logout {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background-color: #e14141;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
 .saved-entries-container ul {
   padding: 0;
